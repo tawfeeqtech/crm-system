@@ -36,10 +36,7 @@ const { hasRole, hasRoles } = usePermission();
                                     :active="route().current('admin.index')">
                                     Admin
                                 </NavLink>
-                                <NavLink v-if="hasRole(['admin', 'moderator', 'writer'])" :href="route('posts.index')"
-                                    :active="route().current('posts.index')">
-                                    Posts
-                                </NavLink>
+
                             </div>
                         </div>
 

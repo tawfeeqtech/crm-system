@@ -1,12 +1,15 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RemoveRoleFromUser;
 use App\Http\Controllers\RevokePermissionFromRole;
 use App\Http\Controllers\RevokePermissionFromUser;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -23,14 +26,16 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+// Route::get('/', function () {
+//     return Inertia::render('Welcome', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//         'laravelVersion' => Application::VERSION,
+//         'phpVersion' => PHP_VERSION,
+//     ]);
+// });
+
+Route::redirect('/', '/login');
 
 
 
@@ -57,5 +62,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('/admin')->group(function () {
     Route::delete('/users/{user}/roles/{role}', RemoveRoleFromUser::class)
         ->name('users.roles.destroy');
 });
+
+Route::resource('clients', ClientController::class);
+Route::resource('projects', ProjectController::class);
+Route::resource('tasks', TaskController::class);
 
 require __DIR__ . '/auth.php';
