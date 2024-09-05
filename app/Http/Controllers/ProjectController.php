@@ -2,16 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ProjectResource;
+use App\Models\Project;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class ProjectController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Response
     {
-        //
+        $projects = Project::with('user', 'client')->get(); // Eager load relationships
+
+        return Inertia::render('Admin/Project/Index', [
+            'projects' => ProjectResource::collection($projects),
+        ]);
     }
 
     /**

@@ -43,4 +43,26 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
+    }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
+
+    // Accessor for created_at
+    public function getCreatedAtAttribute($value)
+    {
+        return $value ? \Carbon\Carbon::parse($value)->format('m/d/Y') : null;
+    }
+
+    // Accessor for updated_at
+    public function getUpdatedAtAttribute($value)
+    {
+        return $value ? \Carbon\Carbon::parse($value)->format('m/d/Y') : null;
+    }
 }

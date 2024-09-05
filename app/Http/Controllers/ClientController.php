@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\StatusClients;
+use App\Http\Requests\CreateClientRequest;
+use App\Http\Resources\ClientResource;
 use App\Models\Client;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -14,9 +17,8 @@ class ClientController extends Controller
      */
     public function index(): Response
     {
-        $clients = Client::all();
         return Inertia::render('Admin/Client/Index', [
-            'clients' => $clients,
+            'clients' => ClientResource::collection(Client::all()),
         ]);
     }
 
@@ -25,15 +27,18 @@ class ClientController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Clients/Create');
+        return Inertia::render('Admin/Client/Create', [
+            'statusOptions' => StatusClients::options()
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CreateClientRequest $request)
     {
-        //
+        Client::create($request->validated()); // Create a new client
+        return to_route('clients.index'); // Redirect to client list
     }
 
     /**
@@ -47,24 +52,29 @@ class ClientController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Client $client): Response
     {
-        //
+        return Inertia::render('Admin/Client/Edit', [
+            'client' => new ClientResource($client),
+            'statusOptions' => StatusClients::options()
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CreateClientRequest $request, Client $client)
     {
-        //
+        $client->update($request->validated());
+        return to_route('clients.index'); // Redirect to client list
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Client $client)
     {
-        //
+        $client->delete();
+        return back();
     }
 }

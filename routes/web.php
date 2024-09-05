@@ -1,16 +1,17 @@
 <?php
 
+use App\Enums\StatusClients;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClientController;
-use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Permission\PermissionController;
+use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\RemoveRoleFromUser;
-use App\Http\Controllers\RevokePermissionFromRole;
-use App\Http\Controllers\RevokePermissionFromUser;
-use App\Http\Controllers\RoleController;
+use App\Http\Controllers\Role\RemoveRoleFromUser;
+use App\Http\Controllers\Permission\RevokePermissionFromRole;
+use App\Http\Controllers\Permission\RevokePermissionFromUser;
+use App\Http\Controllers\Role\RoleController;
 use App\Http\Controllers\TaskController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\User\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -67,4 +68,8 @@ Route::resource('clients', ClientController::class);
 Route::resource('projects', ProjectController::class);
 Route::resource('tasks', TaskController::class);
 
+
+Route::get('/api/status-options', function () {
+    return StatusClients::values();
+});
 require __DIR__ . '/auth.php';

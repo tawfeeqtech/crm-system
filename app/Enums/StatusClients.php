@@ -11,4 +11,14 @@ enum StatusClients: string
     {
         return array_column(self::cases(), 'value');
     }
+
+    public static function options(): array
+    {
+        return [
+            // self::Active->value => 'Active',
+            // self::Inactive->value => 'Inactive',
+            ['label' => 'Active', 'value' => self::Active->value],
+            ['label' => 'Inactive', 'value' => self::Inactive->value],
+        ];
+    }
 }
