@@ -24,6 +24,17 @@ class Client extends Model implements HasMedia
         'status' => StatusClients::class,
     ];
 
+
+    public static function options()
+    {
+        return self::select('id', 'company')->get()->map(function ($client) {
+            return [
+                'label' => $client->company,
+                'value' => $client->id,
+            ];
+        });
+    }
+
     public function scopeActive($query)
     {
         return $query->where('status', 'active');

@@ -44,6 +44,16 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public static function options()
+    {
+        return self::select('id', 'name')->get()->map(function ($user) {
+            return [
+                'label' => $user->name,
+                'value' => $user->id,
+            ];
+        });
+    }
+
     public function projects()
     {
         return $this->hasMany(Project::class);
