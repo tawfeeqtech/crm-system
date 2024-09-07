@@ -2,7 +2,10 @@
 
 namespace Database\Factories;
 
-use App\Enums\StatusProjects;
+use App\Models\Client;
+use App\Models\Project;
+use App\Models\User;
+use Illuminate\Support\Arr;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -11,7 +14,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ProjectFactory extends Factory
 {
-    protected $model = \App\Models\Project::class;
+    protected $model = Project::class;
 
     /**
      * Define the model's default state.
@@ -20,14 +23,15 @@ class ProjectFactory extends Factory
      */
     public function definition(): array
     {
+        $users = collect(User::all()->modelKeys());
+        $clients = collect(Client::all()->modelKeys());
         return [
-            'title' => $this->faker->words(3, true), // Generate a random title
-            'slug' => $this->faker->unique()->slug, // Generate a unique slug
-            'body' => $this->faker->paragraph, // Generate a random body text
-            'deadline' => $this->faker->optional()->dateTime, // Generate an optional deadline
-            'status' => $this->faker->randomElement(StatusProjects::values()), // Random status from the enum
-            'user_id' => rand(1, 5), // Associate with a user
-            'client_id' => rand(1, 10), // Associate with a client
+            'title' => $this->faker->sentence(),
+            'description' => $this->faker->paragraph(),
+            'user_id' => $users->random(),
+            'client_id' => $clients->random(),
+            'deadline' => $this->faker->dateTimeBetween('+1 month', '+6 month'),
+            'status' => Arr::random(Project::STATUS),
         ];
     }
 }

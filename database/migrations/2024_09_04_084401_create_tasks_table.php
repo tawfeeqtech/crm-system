@@ -14,14 +14,15 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('client_id')->constrained()->onDelete('cascade'); // Foreign key to the clients table
-            $table->foreignId('project_id')->nullable()->constrained()->onDelete('set null'); // Foreign key to the projects table, nullable
             $table->string('title'); // Task title
             $table->text('description')->nullable(); // Task description, nullable
-            $table->enum('status', StatusTasks::values())->default(StatusTasks::Pending->value);
-            $table->date('due_date')->nullable(); // Due date, nullable
-            $table->softDeletes(); // Soft deletes column
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('client_id')->constrained();
+            $table->foreignId('project_id')->constrained();
+            $table->date('deadline');
+            $table->string('status')->default('open');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

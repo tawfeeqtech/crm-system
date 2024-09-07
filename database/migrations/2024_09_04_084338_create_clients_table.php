@@ -14,12 +14,16 @@ return new class extends Migration
     {
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
-            $table->string('company');
-            $table->string('vat');
-            $table->text('address')->nullable();
-            $table->enum('status', StatusClients::values())->default(StatusClients::Active->value);
-            $table->softDeletes();
+            $table->string('contact_name');
+            $table->string('contact_email')->unique();
+            $table->string('contact_phone_number');
+            $table->string('company_name');
+            $table->string('company_address');
+            $table->string('company_city');
+            $table->string('company_zip');
+            $table->integer('company_vat');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

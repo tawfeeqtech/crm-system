@@ -10,16 +10,16 @@ class ProjectObserver
     /**
      * Handle the Project "creating" event.
      */
-    public function creating(Project $project): void
-    {
-        $project->slug = Str::slug($project->title);
-    }
+    // public function creating(Project $project): void
+    // {
+    //     $project->slug = Str::slug($project->title);
+    // }
 
     /**
      * Handle the Project "updating" event.
      */
-    public function updating(Project $project): void
-    {
-        $project->slug = Str::slug($project->title);
-    }
+    // public function updating(Project $project): void
+    // {
+    //     $project->slug = Str::slug($project->title);
+    // }
 }

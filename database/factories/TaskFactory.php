@@ -3,7 +3,12 @@
 namespace Database\Factories;
 
 use App\Enums\StatusTasks;
+use App\Models\Client;
+use App\Models\Project;
+use App\Models\Task;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Task>
@@ -17,13 +22,18 @@ class TaskFactory extends Factory
      */
     public function definition(): array
     {
+        $users = collect(User::all()->modelKeys());
+        $clients = collect(Client::all()->modelKeys());
+        $projects = collect(Project::all()->modelKeys());
+
         return [
-            'title' => $this->faker->sentence,
-            'description' => $this->faker->text,
-            'status' => $this->faker->randomElement(StatusTasks::values()), // Random status from the enum
-            'due_date' => $this->faker->date,
-            'client_id' => rand(1, 10), // Associate with a client
-            'project_id' => rand(1, 5), // Optionally associate with a project
+            'title' => $this->faker->sentence(),
+            'description' => $this->faker->paragraph(),
+            'user_id' => $users->random(),
+            'client_id' => $clients->random(),
+            'project_id' => $projects->random(),
+            'deadline' => $this->faker->dateTimeBetween('+1 month', '+6 month'),
+            'status' => Arr::random(Task::STATUS),
         ];
     }
 }

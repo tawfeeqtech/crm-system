@@ -18,14 +18,13 @@ return new class extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('slug')->unique();
-            $table->text('body');
-            $table->timestamp('deadline')->nullable();
-            $table->enum('status', StatusProjects::values())->default(StatusProjects::Open->value);
+            $table->text('description');
+            $table->date('deadline');
+            $table->string('status')->default('open');
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(Client::class);
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

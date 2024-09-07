@@ -14,10 +14,14 @@ class Client extends Model implements HasMedia
     use HasFactory, SoftDeletes, InteractsWithMedia;
 
     protected $fillable = [
-        'company',
-        'vat',
-        'address',
-        'status',
+        'contact_name',
+        'contact_email',
+        'contact_phone_number',
+        'company_name',
+        'company_address',
+        'company_city',
+        'company_zip',
+        'company_vat'
     ];
 
     protected $casts = [
@@ -27,17 +31,17 @@ class Client extends Model implements HasMedia
 
     public static function options()
     {
-        return self::select('id', 'company')->get()->map(function ($client) {
+        return self::select('id', 'contact_name')->get()->map(function ($client) {
             return [
-                'label' => $client->company,
+                'label' => $client->contact_name,
                 'value' => $client->id,
             ];
         });
     }
 
-    public function scopeActive($query)
+    public function setCompanyNameAttribute($value)
     {
-        return $query->where('status', 'active');
+        $this->attributes['company_name'] = ucfirst($value);
     }
 
     public function projects()
@@ -49,17 +53,5 @@ class Client extends Model implements HasMedia
     {
         $this->addMediaCollection('images')
             ->singleFile();
-    }
-
-    // Accessor for created_at
-    public function getCreatedAtAttribute($value)
-    {
-        return $value ? \Carbon\Carbon::parse($value)->format('m/d/Y') : null;
-    }
-
-    // Accessor for updated_at
-    public function getUpdatedAtAttribute($value)
-    {
-        return $value ? \Carbon\Carbon::parse($value)->format('m/d/Y') : null;
     }
 }

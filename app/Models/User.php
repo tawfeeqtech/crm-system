@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -11,7 +12,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -19,9 +20,13 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
         'password',
+        'address',
+        'phone_number',
+        'terms_accepted',
     ];
 
     /**
@@ -44,6 +49,9 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public const FILTER = ['true', 'false'];
+
+
     public static function options()
     {
         return self::select('id', 'name')->get()->map(function ($user) {
@@ -59,20 +67,8 @@ class User extends Authenticatable
         return $this->hasMany(Project::class);
     }
 
-    public function tasks()
+    public function getFullNameAttribute()
     {
-        return $this->hasMany(Task::class);
-    }
-
-    // Accessor for created_at
-    public function getCreatedAtAttribute($value)
-    {
-        return $value ? \Carbon\Carbon::parse($value)->format('m/d/Y') : null;
-    }
-
-    // Accessor for updated_at
-    public function getUpdatedAtAttribute($value)
-    {
-        return $value ? \Carbon\Carbon::parse($value)->format('m/d/Y') : null;
+        return "{$this->first_name} {$this->last_name}";
     }
 }
